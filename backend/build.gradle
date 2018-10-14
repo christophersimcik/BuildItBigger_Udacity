@@ -1,0 +1,46 @@
+// If you would like more information on the gradle-appengine-plugin please refer to the github page
+// https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:+'
+       // classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.9.18'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.+'
+        //classpath  'com.google.appengine/gradle-appengine-plugin/1.9.59'
+        //classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: 'com.google.cloud.tools.endpoints-framework-server'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+dependencies {
+    implementation 'com.google.endpoints:endpoints-framework:2.0.9'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:+'
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'javax.servlet:servlet-api:2.5'
+    implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.http-client:google-http-client-android:1.23.0'
+    implementation project(path: ':jokelibrary')
+}
+appengine {  // App Engine tasks configuration
+    run{
+        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
+        jvmFlags = ["-Dappengine.fullscan.seconds=5"]
+        port = 8080
+        help
+    }
+
+}
